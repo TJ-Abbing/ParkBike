@@ -1,5 +1,7 @@
 # Quick start
+Follow the steps below to get started.
 ## Install dependencies
+Installs all packages that it depends on.
 ```
 npm install
 ```
