@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Coolsingel",
+    "latitude": 51.91819136975007, 
+    "longitude": 4.4801693221029915,
+    "capacity": 140
+  },
+  {
+    "id": 2,
+    "name": "Wijnhaven",
+    "latitude": 51.91715918182614, 
+    "longitude": 4.484041092474765,
+    "capacity": 100
+  }
+]
+  
