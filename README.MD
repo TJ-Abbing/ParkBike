@@ -1,9 +1,13 @@
-# Commands
-## Run app via QR code
+# Quick start
+## Install dependencies
+```
+npm install
+```
+## Run app option #1 - Run app on your device via Expo by scanning a QR code.
 ```
 npx expo start
 ```
-## Runs app via Android Studio Emulator
+## Run app option #2 - Runs app via Android Studio's Emulator.
 ```
-npm run android 
+npm run android
 ```
