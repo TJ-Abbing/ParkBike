@@ -41,6 +41,14 @@ export default function App() {
             longitudeDelta: 0.0421,
           }}
         >
+          {/* Add a marker for the client's current position. */}
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+          />
           {/* Map over bikeparkingspots array and render markers on the map. */}
           {bikeparkingspots.map((spot) => (
             <Marker
