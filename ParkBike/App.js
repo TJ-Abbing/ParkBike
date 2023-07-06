@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      // Conditionally render the map or loading text based on location availability.
+      {/* Conditionally render the map or loading text based on location availability. */}
       {location ? (
         <MapView
           style={styles.map}
@@ -41,7 +41,7 @@ export default function App() {
             longitudeDelta: 0.0421,
           }}
         >
-          // Map over bikeparkingspots array and render markers on the map.
+          {/* Map over bikeparkingspots array and render markers on the map. */}
           {bikeparkingspots.map((spot) => (
             <Marker
               key={spot.id}
@@ -57,7 +57,7 @@ export default function App() {
       ) : (
         <Text>Loading map...</Text>
       )}
-      // StatusBar component for controlling the status bar style.
+      {/* StatusBar component for controlling the status bar style. */}
       <StatusBar style="auto" />
     </View>
   );
