@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -24,7 +24,7 @@ export default function App() {
       setLocation(location);
     };
 
-    // Call the fetchLocation function.
+    // Calls the fetchLocation function.
     fetchLocation();
   }, []);
 
@@ -41,15 +41,21 @@ export default function App() {
             longitudeDelta: 0.0421,
           }}
         >
-          {/* Add a marker for the client's current position. */}
+          {/* Adds a marker for the client's current position. */}
           <Marker
             coordinate={{
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             }}
             title="Your Location"
-          />
-          {/* Map over bikeparkingspots array and render markers on the map. */}
+          >
+            <Image
+              source={require('./bicycle.png')}
+              style={{ width: 50, height: 50 }}
+            />
+          </Marker>
+
+          {/* Maps over bikeparkingspots array and render markers on the map. */}
           {bikeparkingspots.map((spot) => (
             <Marker
               key={spot.id}
