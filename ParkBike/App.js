@@ -6,31 +6,30 @@ import * as Location from 'expo-location';
 import bikeparkingspots from './bikeparkingspots.json';
 
 export default function App() {
-  // State variables for location and error messages.
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  // UseEffect hook to fetch location data when component mounts.
   useEffect(() => {
-    // Async function to request location permissions and get current position.
     const fetchLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
         return;
       }
+    
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+      } catch (error) {
+        console.log(error);
+        setErrorMsg('We’re unable to show the map because access to your location data was not granted. Please enable location services to use this feature.');
+      }
+    }; 
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    };
-
-    // Calls the fetchLocation function.
     fetchLocation();
   }, []);
 
   return (
     <View style={styles.container}>
-      {/* Conditionally render the map or loading text based on location availability. */}
       {location ? (
         <MapView
           style={styles.map}
@@ -41,7 +40,6 @@ export default function App() {
             longitudeDelta: 0.0421,
           }}
         >
-          {/* Adds a marker for the client's current position. */}
           <Marker
             coordinate={{
               latitude: location.coords.latitude,
@@ -55,7 +53,6 @@ export default function App() {
             />
           </Marker>
 
-          {/* Maps over bikeparkingspots array and render markers on the map. */}
           {bikeparkingspots.map((spot) => (
             <Marker
               key={spot.id}
@@ -68,16 +65,18 @@ export default function App() {
             />
           ))}
         </MapView>
+      ) : errorMsg ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.error}>{errorMsg}</Text>
+        </View>
       ) : (
         <Text>Loading map...</Text>
       )}
-      {/* StatusBar component for controlling the status bar style. */}
       <StatusBar style="auto" />
     </View>
   );
 }
 
-// Styling.
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -87,5 +86,13 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  error: {
+    color: 'red',
   },
 });
