@@ -50,7 +50,7 @@ export default function App() {
             title="Your Location"
           >
             <Image
-              source={require('./bicycle.png')}
+              source={require('./images/bicycle.png')}
               style={{ width: 50, height: 50 }}
             />
           </Marker>
