@@ -31,13 +31,16 @@ export default function App() {
   return (
     <View style={styles.container}>
       {location ? (
-        <MapView
+        <MapView.Animated
           style={styles.map}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+          initialCamera={{
+            center: {
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            },
+            pitch: 20,
+            heading: 0,
+            zoom: 17,
           }}
         >
           <Marker
@@ -64,7 +67,7 @@ export default function App() {
               description={`Capacity: ${spot.capacity}`}
             />
           ))}
-        </MapView>
+        </MapView.Animated>
       ) : errorMsg ? (
         <View style={styles.errorContainer}>
           <Text style={styles.error}>{errorMsg}</Text>
