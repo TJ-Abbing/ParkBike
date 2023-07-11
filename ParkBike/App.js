@@ -46,7 +46,7 @@ export default function App() {
           },
           pitch: 20,
           heading: 0,
-          zoom: 17,
+          zoom: 13,
         }}
 
         mapType="standard"
@@ -70,7 +70,7 @@ export default function App() {
           >
             <Image
               source={require('./images/bicycle.png')}
-              style={{ width: 50, height: 50 }}
+              style={{ width: 48, height: 48 }}
             />
           </Marker>
 
@@ -87,7 +87,7 @@ export default function App() {
           >
             <Image
               source={require('./images/biycle_parking_spot_regular.png')}
-              style={{ width: 50, height: 50, borderRadius: 8 }}
+              style={{ width: 32, height: 32, borderRadius: 8 }}
             />
           </Marker>
 
