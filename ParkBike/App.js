@@ -6,10 +6,12 @@ import * as Location from 'expo-location';
 import bikeparkingspots from './bikeparkingspots.json';
 
 export default function App() {
+  
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
+
     const fetchLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -26,22 +28,37 @@ export default function App() {
     }; 
 
     fetchLocation();
+    
   }, []);
 
   return (
+
     <View style={styles.container}>
+
       {location ? (
         <MapView.Animated
-          style={styles.map}
-          initialCamera={{
-            center: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            },
-            pitch: 20,
-            heading: 0,
-            zoom: 17,
-          }}
+        style={styles.map}
+
+        initialCamera={{
+          center: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          },
+          pitch: 20,
+          heading: 0,
+          zoom: 17,
+        }}
+
+        mapType="standard"
+        showsUserLocation={false}
+        showsMyLocationButton={false}
+        showsPointsOfInterest={false}
+        showsBuildings={true}
+        showsTraffic={false}
+        showsIndoors={false}
+        showsCompass={false}
+        rotateEnabled={true}
+
         >
           <Marker
             coordinate={{
@@ -49,6 +66,7 @@ export default function App() {
               longitude: location.coords.longitude,
             }}
             title="Your Location"
+            description='You are here.'
           >
             <Image
               source={require('./images/bicycle.png')}
@@ -57,17 +75,21 @@ export default function App() {
           </Marker>
 
           {bikeparkingspots.map((spot) => (
+
             <Marker
               key={spot.id}
               coordinate={{
                 latitude: spot.latitude,
                 longitude: spot.longitude,
               }}
+
               title={spot.name}
               description={`Capacity: ${spot.capacity}`}
             />
           ))}
+
         </MapView.Animated>
+
       ) : errorMsg ? (
         <View style={styles.errorContainer}>
           <Text style={styles.error}>{errorMsg}</Text>
@@ -75,7 +97,9 @@ export default function App() {
       ) : (
         <Text>Loading map...</Text>
       )}
+
       <StatusBar style="auto" />
+
     </View>
   );
 }
