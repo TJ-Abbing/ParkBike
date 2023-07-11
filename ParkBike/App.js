@@ -76,16 +76,21 @@ export default function App() {
 
           {bikeparkingspots.map((spot) => (
 
-            <Marker
-              key={spot.id}
-              coordinate={{
-                latitude: spot.latitude,
-                longitude: spot.longitude,
-              }}
-
-              title={spot.name}
-              description={`Capacity: ${spot.capacity}`}
+          <Marker
+            key={spot.id}
+            coordinate={{
+              latitude: spot.latitude,
+              longitude: spot.longitude,
+            }}
+            title={spot.name}
+            description={`Capacity: ${spot.capacity}`}
+          >
+            <Image
+              source={require('./images/biycle_parking_spot_regular.png')}
+              style={{ width: 50, height: 50, borderRadius: 8 }}
             />
+          </Marker>
+
           ))}
 
         </MapView.Animated>
