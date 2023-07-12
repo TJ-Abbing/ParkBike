@@ -1,6 +1,7 @@
 // Import necessary components from React Native and Expo libraries
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import Text from './Text.js';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -136,10 +137,12 @@ export default function App() {
 
       {/* Render a button to show/hide the list of bike parking spots */}
       <View style={styles.buttonContainer}>
-        <Button
-          title="Show List"
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => setShowList(!showList)}
-        />
+        >
+          <Text style={styles.buttonText}>Show List</Text>
+        </TouchableOpacity>
       </View>
 
       {/* If showList is true, render the list of bike parking spots */}
@@ -180,14 +183,26 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
-    alignSelf:'center'
+    bottom: 16,
+    alignSelf: 'center',
   },
+  button: {
+    backgroundColor: '#2196F3',
+    padding: 16,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold'
+  },  
   listContainer:{
     position:'absolute',
-    backgroundColor:'white',
-    paddingVertical:'5%',
-    paddingHorizontal:'2%',
-    borderRadius: 5
+    backgroundColor:'#F0F0F0',
+    paddingVertical: 80,
+    paddingHorizontal: 80,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#CCCCCC',
+    margin: 8,
   }
 });
