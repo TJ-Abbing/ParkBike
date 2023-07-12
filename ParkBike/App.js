@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -9,6 +9,8 @@ export default function App() {
   
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [showList, setShowList] = useState(false);
+  const [mapRegion, setMapRegion] = useState(null);
 
   useEffect(() => {
 
@@ -21,6 +23,12 @@ export default function App() {
       try {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
+        setMapRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
       } catch (error) {
         console.log(error);
         setErrorMsg('We’re unable to show the map because access to your location data was not granted. Please enable location services to use this feature.');
@@ -31,6 +39,16 @@ export default function App() {
     
   }, []);
 
+  const handleSpotPress = (spot) => {
+    setMapRegion({
+      latitude: spot.latitude,
+      longitude: spot.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+    setShowList(false);
+  };
+
   return (
 
     <View style={styles.container}>
@@ -38,16 +56,7 @@ export default function App() {
       {location ? (
         <MapView.Animated
         style={styles.map}
-
-        initialCamera={{
-          center: {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          },
-          pitch: 20,
-          heading: 0,
-          zoom: 13,
-        }}
+        region={mapRegion}
 
         mapType="standard"
         showsUserLocation={false}
@@ -103,6 +112,23 @@ export default function App() {
         <Text>Loading map...</Text>
       )}
 
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Show List"
+          onPress={() => setShowList(!showList)}
+        />
+      </View>
+
+      {showList && (
+        <View style={styles.listContainer}>
+          {bikeparkingspots.map((spot) => (
+            <TouchableOpacity key={spot.id} onPress={() => handleSpotPress(spot)}>
+              <Text>{spot.name} - Capacity: {spot.capacity}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
       <StatusBar style="auto" />
 
     </View>
@@ -127,4 +153,16 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
   },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    alignSelf:'center'
+  },
+  listContainer:{
+    position:'absolute',
+    backgroundColor:'white',
+    paddingVertical:'5%',
+    paddingHorizontal:'2%',
+    borderRadius: 5
+  }
 });
