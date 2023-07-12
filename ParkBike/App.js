@@ -55,18 +55,18 @@ export default function App() {
     
   }, []);
 
-// Define a function to handle when a bike parking spot is pressed in the list
-const handleSpotPress = (spot) => {
-  // Update the map region to center on the selected bike parking spot
-  setMapRegion({
-    latitude: spot.latitude + Math.random() * 0.000001,
-    longitude: spot.longitude + Math.random() * 0.000001,
-    latitudeDelta: 0.025,
-    longitudeDelta: 0.025,
-  });
-  // Hide the list of bike parking spots
-  setShowList(false);
-};
+  // Define a function to handle when a bike parking spot is pressed in the list
+  const handleSpotPress = (spot) => {
+    // Update the map region to center on the selected bike parking spot
+    setMapRegion({
+      latitude: spot.latitude + Math.random() * 0.000001,
+      longitude: spot.longitude + Math.random() * 0.000001,
+      latitudeDelta: 0.025,
+      longitudeDelta: 0.025,
+    });
+    // Hide the list of bike parking spots
+    setShowList(false);
+  };
 
   // Render the app UI
   return (
@@ -128,7 +128,9 @@ const handleSpotPress = (spot) => {
                 }
               }}>
                 <View style={styles.callout}>
-                  <Text>{favorites.includes(spot.id) ? 'Remove from favorites' : 'Add to favorites'}</Text>
+                  <Text style={styles.calloutTitle}>{spot.name}</Text>
+                  <Text>Capacity: {spot.capacity}</Text>
+                  <Text>{favorites.includes(spot.id) ? 'Click to remove from favorites' : 'Click to add to favorites'}</Text>
                 </View>
               </Callout>
             </Marker>
@@ -229,6 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 8,
     borderRadius: 8,
+    width: 200,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -243,5 +246,8 @@ const styles = StyleSheet.create({
 },
 activeSwitch:{
 backgroundColor:'#2196F3'
+},
+calloutTitle:{
+fontWeight:'bold'
 }
 });
