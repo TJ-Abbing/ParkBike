@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Text from './Text.js';
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 // Import data for bike parking spots
@@ -17,6 +17,8 @@ export default function App() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [showList, setShowList] = useState(false);
   const [mapRegion, setMapRegion] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   // Use the useEffect hook to fetch the user's location when the component mounts
   useEffect(() => {
@@ -53,18 +55,18 @@ export default function App() {
     
   }, []);
 
-  // Define a function to handle when a bike parking spot is pressed in the list
-  const handleSpotPress = (spot) => {
-    // Update the map region to center on the selected bike parking spot
-    setMapRegion({
-      latitude: spot.latitude,
-      longitude: spot.longitude,
-      latitudeDelta: 0.025,
-      longitudeDelta: 0.025,
-    });
-    // Hide the list of bike parking spots
-    setShowList(false);
-  };
+// Define a function to handle when a bike parking spot is pressed in the list
+const handleSpotPress = (spot) => {
+  // Update the map region to center on the selected bike parking spot
+  setMapRegion({
+    latitude: spot.latitude + Math.random() * 0.000001,
+    longitude: spot.longitude + Math.random() * 0.000001,
+    latitudeDelta: 0.025,
+    longitudeDelta: 0.025,
+  });
+  // Hide the list of bike parking spots
+  setShowList(false);
+};
 
   // Render the app UI
   return (
@@ -86,7 +88,6 @@ export default function App() {
           showsIndoors={false}
           showsCompass={false}
           rotateEnabled={true}
-
         >
           {/* Render a marker for the user's current location */}
           <Marker
@@ -119,6 +120,17 @@ export default function App() {
                 source={require('./images/biycle_parking_spot_regular.png')}
                 style={{ width: 32, height: 32, borderRadius: 8 }}
               />
+              <Callout tooltip onPress={() => {
+                if (favorites.includes(spot.id)) {
+                  setFavorites(favorites.filter((id) => id !== spot.id));
+                } else {
+                  setFavorites([...favorites, spot.id]);
+                }
+              }}>
+                <View style={styles.callout}>
+                  <Text>{favorites.includes(spot.id) ? 'Remove from favorites' : 'Add to favorites'}</Text>
+                </View>
+              </Callout>
             </Marker>
 
           ))}
@@ -148,7 +160,15 @@ export default function App() {
       {/* If showList is true, render the list of bike parking spots */}
       {showList && (
         <View style={styles.listContainer}>
-          {bikeparkingspots.map((spot) => (
+          <View style={styles.switchContainer}>
+            <TouchableOpacity onPress={() => setShowFavorites(false)}>
+              <Text style={[styles.switch, !showFavorites && styles.activeSwitch]}>All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowFavorites(true)}>
+              <Text style={[styles.switch, showFavorites && styles.activeSwitch]}>Favorites</Text>
+            </TouchableOpacity>
+          </View>
+          {(showFavorites ? bikeparkingspots.filter((spot) => favorites.includes(spot.id)) : bikeparkingspots).map((spot) => (
             <TouchableOpacity key={spot.id} onPress={() => handleSpotPress(spot)}>
               <Text>{spot.name} - Capacity: {spot.capacity}</Text>
             </TouchableOpacity>
@@ -204,5 +224,24 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#CCCCCC',
     margin: 8,
-  }
+  },
+  callout: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 8,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  switch: {
+    backgroundColor:'#CCCCCC',
+    paddingVertical:4,
+    paddingHorizontal:8,
+    borderRadius:4,
+    marginRight:4
+},
+activeSwitch:{
+backgroundColor:'#2196F3'
+}
 });
