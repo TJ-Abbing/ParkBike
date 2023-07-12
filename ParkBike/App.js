@@ -37,9 +37,9 @@ export default function App() {
         setMapRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
+          latitudeDelta: 0.025,
+          longitudeDelta: 0.025,
+        });        
       } catch (error) {
         console.log(error);
         // If there was an error getting the user's location, set an error message
@@ -58,8 +58,8 @@ export default function App() {
     setMapRegion({
       latitude: spot.latitude,
       longitude: spot.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitudeDelta: 0.025,
+      longitudeDelta: 0.025,
     });
     // Hide the list of bike parking spots
     setShowList(false);
