@@ -1,28 +1,39 @@
+// Import necessary components from React Native and Expo libraries
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+
+// Import data for bike parking spots
 import bikeparkingspots from './bikeparkingspots.json';
 
+// Define the main App component
 export default function App() {
   
+  // Define state variables for location, error message, showList and mapRegion
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [showList, setShowList] = useState(false);
   const [mapRegion, setMapRegion] = useState(null);
 
+  // Use the useEffect hook to fetch the user's location when the component mounts
   useEffect(() => {
 
+    // Define an async function to fetch the user's location
     const fetchLocation = async () => {
+      // Request permission to access the user's location
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         return;
       }
     
       try {
+        // Get the user's current position
         let location = await Location.getCurrentPositionAsync({});
+        // Update the location state variable with the user's location
         setLocation(location);
+        // Set the initial map region to center on the user's location
         setMapRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
@@ -31,44 +42,52 @@ export default function App() {
         });
       } catch (error) {
         console.log(error);
+        // If there was an error getting the user's location, set an error message
         setErrorMsg('We’re unable to show the map because access to your location data was not granted. Please enable location services to use this feature.');
       }
     }; 
 
+    // Call the fetchLocation function to get the user's location
     fetchLocation();
     
   }, []);
 
+  // Define a function to handle when a bike parking spot is pressed in the list
   const handleSpotPress = (spot) => {
+    // Update the map region to center on the selected bike parking spot
     setMapRegion({
       latitude: spot.latitude,
       longitude: spot.longitude,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     });
+    // Hide the list of bike parking spots
     setShowList(false);
   };
 
+  // Render the app UI
   return (
 
     <View style={styles.container}>
 
+      {/* If we have the user's location, render the map */}
       {location ? (
         <MapView.Animated
-        style={styles.map}
-        region={mapRegion}
+          style={styles.map}
+          region={mapRegion}
 
-        mapType="standard"
-        showsUserLocation={false}
-        showsMyLocationButton={false}
-        showsPointsOfInterest={false}
-        showsBuildings={true}
-        showsTraffic={false}
-        showsIndoors={false}
-        showsCompass={false}
-        rotateEnabled={true}
+          mapType="standard"
+          showsUserLocation={false}
+          showsMyLocationButton={false}
+          showsPointsOfInterest={false}
+          showsBuildings={true}
+          showsTraffic={false}
+          showsIndoors={false}
+          showsCompass={false}
+          rotateEnabled={true}
 
         >
+          {/* Render a marker for the user's current location */}
           <Marker
             coordinate={{
               latitude: location.coords.latitude,
@@ -83,35 +102,39 @@ export default function App() {
             />
           </Marker>
 
+          {/* Render markers for each bike parking spot */}
           {bikeparkingspots.map((spot) => (
 
-          <Marker
-            key={spot.id}
-            coordinate={{
-              latitude: spot.latitude,
-              longitude: spot.longitude,
-            }}
-            title={spot.name}
-            description={`Capacity: ${spot.capacity}`}
-          >
-            <Image
-              source={require('./images/biycle_parking_spot_regular.png')}
-              style={{ width: 32, height: 32, borderRadius: 8 }}
-            />
-          </Marker>
+            <Marker
+              key={spot.id}
+              coordinate={{
+                latitude: spot.latitude,
+                longitude: spot.longitude,
+              }}
+              title={spot.name}
+              description={`Capacity: ${spot.capacity}`}
+            >
+              <Image
+                source={require('./images/biycle_parking_spot_regular.png')}
+                style={{ width: 32, height: 32, borderRadius: 8 }}
+              />
+            </Marker>
 
           ))}
 
         </MapView.Animated>
 
       ) : errorMsg ? (
+        // If there was an error getting the user's location, show an error message
         <View style={styles.errorContainer}>
           <Text style={styles.error}>{errorMsg}</Text>
         </View>
       ) : (
+        // Otherwise, show a loading message while we wait for the user's location
         <Text>Loading map...</Text>
       )}
 
+      {/* Render a button to show/hide the list of bike parking spots */}
       <View style={styles.buttonContainer}>
         <Button
           title="Show List"
@@ -119,6 +142,7 @@ export default function App() {
         />
       </View>
 
+      {/* If showList is true, render the list of bike parking spots */}
       {showList && (
         <View style={styles.listContainer}>
           {bikeparkingspots.map((spot) => (
@@ -135,6 +159,7 @@ export default function App() {
   );
 }
 
+// Define styles for the app
 const styles = StyleSheet.create({
   container: {
     flex: 1,
