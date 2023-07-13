@@ -22,6 +22,9 @@ export default function App() {
   // Define a state variable to store the bike parking spots data
   const [bikeparkingspots, setBikeparkingspots] = useState([]);
 
+  // Define a new state variable for mapLoaded and set it to false initially
+  const [mapLoaded, setMapLoaded] = useState(false);
+
   // Use the useEffect hook to fetch the user's location and bike parking spots data when the component mounts
   useEffect(() => {
 
@@ -131,6 +134,9 @@ export default function App() {
           showsIndoors={false}
           showsCompass={false}
           rotateEnabled={true}
+
+          // Add an onMapReady prop to your MapView.Animated component
+          onMapReady={() => setMapLoaded(true)}
         >
           {/* Render a marker for the user's current location */}
           <Marker
@@ -202,15 +208,17 @@ export default function App() {
         <Text>Loading map...</Text>
       )}
 
-      {/* Render a button to show/hide the list of bike parking spots */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setShowList(!showList)}
-        >
-          <Text style={styles.buttonText}>Show List</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Conditionally render the "Show List" button based on the value of the mapLoaded state variable */}
+      {mapLoaded && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setShowList(!showList)}
+          >
+            <Text style={styles.buttonText}>Show List</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* If showList is true, render the list of bike parking spots */}
       {showList && (
