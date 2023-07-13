@@ -117,18 +117,24 @@ export default function App() {
         >
           {/* Render a marker for the user's current location */}
           <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="Your Location"
-            description='You are here.'
-          >
-            <Image
-              source={require('./images/bicycle.png')}
-              style={{ width: 48, height: 48 }}
-            />
-          </Marker>
+          coordinate={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }}
+          title="Your Location"
+          description='You are here.'
+        >
+          <Image
+            source={require('./images/bicycle.png')}
+            style={{ width: 48, height: 48 }}
+          />
+          <Callout tooltip>
+            <View style={styles.callout}>
+              <Text style={styles.calloutTitle}>Your Location</Text>
+              <Text>You are here.</Text>
+            </View>
+          </Callout>
+        </Marker>
 
           {/* Render markers for each bike parking spot */}
           {bikeparkingspots.map((spot) => (
@@ -257,12 +263,14 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     margin: 8,
   },
-   callout: {
-     backgroundColor: 'white',
-     padding: 8,
-     borderRadius: 8,
-     width: 200,
-   },
+  callout: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 8,
+    width: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
    switchContainer:{
      flexDirection:'row',
      marginBottom:8
