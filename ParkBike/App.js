@@ -143,7 +143,11 @@ export default function App() {
               description={`Capacity: ${spot.capacity}`}
             >
               <Image
-                source={require('./images/biycle_parking_spot_regular.png')}
+                source={
+                  favorites.includes(spot.id)
+                    ? require('./images/biycle_parking_spot_favorite.png')
+                    : require('./images/biycle_parking_spot_regular.png')
+                }
                 style={{ width: 32, height: 32, borderRadius: 8 }}
               />
               <Callout tooltip onPress={() => {
