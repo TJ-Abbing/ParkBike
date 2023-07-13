@@ -5,6 +5,7 @@ import Text from './Text.js';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import data for bike parking spots
 import bikeparkingspots from './bikeparkingspots.json';
@@ -52,6 +53,19 @@ export default function App() {
 
     // Call the fetchLocation function to get the user's location
     fetchLocation();
+
+    // Add this code inside your existing useEffect hook
+    const getFavorites = async () => {
+      try {
+        const storedFavorites = await AsyncStorage.getItem('favorites');
+        if (storedFavorites) {
+          setFavorites(JSON.parse(storedFavorites));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFavorites();
     
   }, []);
 
@@ -66,6 +80,15 @@ export default function App() {
     });
     // Hide the list of bike parking spots
     setShowList(false);
+  };
+
+  const updateFavorites = async (newFavorites) => {
+    setFavorites(newFavorites);
+    try {
+      await AsyncStorage.setItem('favorites', JSON.stringify(newFavorites));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Render the app UI
@@ -122,9 +145,9 @@ export default function App() {
               />
               <Callout tooltip onPress={() => {
                 if (favorites.includes(spot.id)) {
-                  setFavorites(favorites.filter((id) => id !== spot.id));
+                  updateFavorites(favorites.filter((id) => id !== spot.id));
                 } else {
-                  setFavorites([...favorites, spot.id]);
+                  updateFavorites([...favorites, spot.id]);
                 }
               }}>
                 <View style={styles.callout}>
@@ -227,27 +250,27 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     margin: 8,
   },
-  callout: {
-    backgroundColor: 'white',
-    padding: 8,
-    borderRadius: 8,
-    width: 200,
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  switch: {
-    backgroundColor:'#CCCCCC',
-    paddingVertical:4,
-    paddingHorizontal:8,
-    borderRadius:4,
-    marginRight:4
-},
-activeSwitch:{
-backgroundColor:'#2196F3'
-},
-calloutTitle:{
-fontWeight:'bold'
-}
+   callout: {
+     backgroundColor: 'white',
+     padding: 8,
+     borderRadius: 8,
+     width: 200,
+   },
+   switchContainer:{
+     flexDirection:'row',
+     marginBottom:8
+   },
+   switch:{
+     backgroundColor:'#CCCCCC',
+     paddingVertical:4,
+     paddingHorizontal:8,
+     borderRadius:4,
+     marginRight:4
+   },
+   activeSwitch:{
+     backgroundColor:'#2196F3'
+   },
+   calloutTitle:{
+     fontWeight:'bold'
+   }
 });
