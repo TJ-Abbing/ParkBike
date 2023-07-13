@@ -7,9 +7,6 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Import data for bike parking spots
-import bikeparkingspots from './bikeparkingspots.json';
-
 // Define the main App component
 export default function App() {
   
@@ -22,7 +19,10 @@ export default function App() {
   const [showFavorites, setShowFavorites] = useState(false);
   const [mapKey, setMapKey] = useState(0);
 
-  // Use the useEffect hook to fetch the user's location when the component mounts
+  // Define a state variable to store the bike parking spots data
+  const [bikeparkingspots, setBikeparkingspots] = useState([]);
+
+  // Use the useEffect hook to fetch the user's location and bike parking spots data when the component mounts
   useEffect(() => {
 
     // Define an async function to fetch the user's location
@@ -67,6 +67,23 @@ export default function App() {
       }
     };
     getFavorites();
+
+    // Define an async function to fetch the bike parking spots data
+    const fetchBikeparkingspots = async () => {
+      try {
+        // Send a GET request to the API endpoint
+        const response = await fetch('https://stud.hosted.hr.nl/1014535/parkbike/api/bikeparkingspots.json');
+        // Parse the response as JSON
+        const data = await response.json();
+        // Update the bikeparkingspots state variable with the fetched data
+        setBikeparkingspots(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // Call the fetchBikeparkingspots function to fetch the bike parking spots data
+    fetchBikeparkingspots();
     
   }, []);
 
@@ -117,24 +134,24 @@ export default function App() {
         >
           {/* Render a marker for the user's current location */}
           <Marker
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title="Your Location"
-          description='You are here.'
-        >
-          <Image
-            source={require('./images/bicycle.png')}
-            style={{ width: 48, height: 48 }}
-          />
-          <Callout tooltip>
-            <View style={styles.callout}>
-              <Text style={styles.calloutTitle}>Your Location</Text>
-              <Text>You are here.</Text>
-            </View>
-          </Callout>
-        </Marker>
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+            description='You are here.'
+          >
+            <Image
+              source={require('./images/bicycle.png')}
+              style={{ width: 48, height: 48 }}
+            />
+            <Callout tooltip>
+              <View style={styles.callout}>
+                <Text style={styles.calloutTitle}>Your Location</Text>
+                <Text>You are here.</Text>
+              </View>
+            </Callout>
+          </Marker>
 
           {/* Render markers for each bike parking spot */}
           {bikeparkingspots.map((spot) => (
@@ -267,25 +284,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 8,
     borderRadius: 8,
-    width: 200,
+    maxWidth: 200,
     alignItems: 'center',
     justifyContent: 'center',
   },
-   switchContainer:{
-     flexDirection:'row',
-     marginBottom:8
-   },
-   switch:{
-     backgroundColor:'#CCCCCC',
-     paddingVertical:4,
-     paddingHorizontal:8,
-     borderRadius:4,
-     marginRight:4
-   },
-   activeSwitch:{
-     backgroundColor:'#2196F3'
-   },
-   calloutTitle:{
-     fontWeight:'bold'
-   }
+  switchContainer:{
+    flexDirection:'row',
+    marginBottom:8
+  },
+  switch:{
+    backgroundColor:'#CCCCCC',
+    paddingVertical:4,
+    paddingHorizontal:8,
+    borderRadius:4,
+    marginRight:4
+  },
+  activeSwitch:{
+    backgroundColor:'#2196F3'
+  },
+  calloutTitle:{
+    fontWeight:'bold'
+  }
 });
