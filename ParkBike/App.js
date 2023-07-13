@@ -20,6 +20,7 @@ export default function App() {
   const [mapRegion, setMapRegion] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [mapKey, setMapKey] = useState(0);
 
   // Use the useEffect hook to fetch the user's location when the component mounts
   useEffect(() => {
@@ -89,6 +90,7 @@ export default function App() {
     } catch (error) {
       console.log(error);
     }
+    setMapKey(mapKey + 1);
   };
 
   // Render the app UI
@@ -99,6 +101,7 @@ export default function App() {
       {/* If we have the user's location, render the map */}
       {location ? (
         <MapView.Animated
+          key={mapKey}
           style={styles.map}
           region={mapRegion}
 
