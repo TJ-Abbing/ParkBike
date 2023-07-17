@@ -51,7 +51,7 @@ export default function App() {
       } catch (error) {
         console.log(error);
         // If there was an error getting the user's location, set an error message
-        setErrorMsg('We’re unable to show the map because access to your location data was not granted. Please enable location services to use this feature.');
+        setErrorMsg('We’re unable to show the map because access to your location data was not granted. Please enable location services in order to use this application.');
       }
     }; 
 
