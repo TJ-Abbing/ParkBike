@@ -90,13 +90,19 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false); // State for dark mode
 
   useEffect(() => {
+    console.log(`Re-rendering map. Dark mode set to: ${darkMode}.`);
+  
+    let mapRenderSuccessful = true;
+  
     // Fetch user location and bike parking data
     const fetchLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        console.error('Location permission not granted.');
+        mapRenderSuccessful = false;
         return;
       }
-
+  
       try {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
@@ -106,25 +112,29 @@ export default function App() {
           latitudeDelta: 0.025,
           longitudeDelta: 0.025,
         });
+        console.log('Location fetched successfully.');
       } catch (error) {
-        console.log(error);
+        console.error(`Error retrieving location. Error: ${error.message || error}`);
         setErrorMsg(
           'We’re unable to show the map because access to your location data was not granted. Please enable location services in order to use this application.'
         );
+        mapRenderSuccessful = false;
       }
     };
-
+  
     const getFavorites = async () => {
       try {
         const storedFavorites = await AsyncStorage.getItem('favorites');
         if (storedFavorites) {
           setFavorites(JSON.parse(storedFavorites));
+          console.log('Favorites fetched successfully.');
         }
       } catch (error) {
-        console.log(error);
+        console.error(`Error retrieving favorites from storage: ${error.message || error}`);
+        mapRenderSuccessful = false;
       }
     };
-
+  
     const fetchBikeparkingspots = async () => {
       try {
         const response = await fetch(
@@ -132,16 +142,25 @@ export default function App() {
         );
         const data = await response.json();
         setBikeparkingspots(data);
+        console.log('Bike parking spots fetched successfully.');
       } catch (error) {
-        console.log(error);
+        console.error(`Error fetching bike parking spots: ${error.message || error}`);
+        mapRenderSuccessful = false;
       }
     };
-
+  
     // Fetch location, favorites, and bike parking data
-    fetchLocation();
-    getFavorites();
-    fetchBikeparkingspots();
-  }, []);
+    Promise.all([fetchLocation(), getFavorites(), fetchBikeparkingspots()]).then(() => {
+      // Log when all asynchronous operations have completed
+      if (mapRenderSuccessful === false) {
+        console.error('Fetch operations failed.');
+      } else if (mapRenderSuccessful === true) {
+        console.log('Fetch operations completed successfully.');
+      }
+    });
+  
+  }, [darkMode]);
+  
 
   const handleSpotPress = (spot) => {
     setMapRegion({
@@ -165,6 +184,7 @@ export default function App() {
 
   // Function to toggle dark mode
   const toggleDarkMode = () => {
+    console.log('Toggling dark mode.');
     setDarkMode((prevMode) => !prevMode);
   };
 
@@ -175,7 +195,7 @@ export default function App() {
           key={mapKey}
           style={[styles.map, darkMode && styles.darkMap]}
           region={mapRegion}
-          mapType={darkMode ? 'standard' : 'standard'}
+          mapType={'standard'}
           showsUserLocation={false}
           showsMyLocationButton={false}
           showsPointsOfInterest={false}
@@ -185,7 +205,7 @@ export default function App() {
           showsCompass={false}
           rotateEnabled={true}
           onMapReady={() => setMapLoaded(true)}
-          customMapStyle={darkMode ? darkMapStyle : undefined} // Apply dark map style here
+          customMapStyle={darkMode ? darkMapStyle : []}// Apply dark map style here
         >
           {/* Markers and Callouts */}
           <Marker
