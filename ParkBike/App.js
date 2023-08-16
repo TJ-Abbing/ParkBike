@@ -90,7 +90,7 @@ export default function App() {
   useEffect(() => {
     console.log(`Selected language: ${selectedLanguage}`);
     console.log(`Re-rendering map. Dark mode set to: ${darkMode}.`);
-  
+
     let mapRenderSuccessful = true;
   
     // Fetch user location and bike parking data
@@ -157,9 +157,9 @@ export default function App() {
         console.log('Fetch operations completed successfully.');
       }
     });
-  
+
   }, [darkMode]);
-  
+
 
   const handleSpotPress = (spot) => {
     setMapRegion({
@@ -280,7 +280,7 @@ export default function App() {
       ) : (
         <Text>{translate('loadingMap', selectedLanguage)}</Text>
       )}
-
+      
       {mapLoaded && (
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => setShowList(!showList)}>
@@ -323,12 +323,12 @@ export default function App() {
             <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
             <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
               <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
-                English
+                English{selectedLanguage === 'en' && '  ✔'}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setSelectedLanguage('nl')}>
               <Text style={[styles.menuItem, selectedLanguage === 'nl' && styles.selectedLanguage]}>
-                Nederlands
+                Nederlands{selectedLanguage === 'nl' && '  ✔'}
               </Text>
             </TouchableOpacity>
 
@@ -336,7 +336,7 @@ export default function App() {
               <Text style={styles.darkModeText}>{translate('darkMode', selectedLanguage)}</Text>
               <Switch value={darkMode} onValueChange={toggleDarkMode} />
             </View>
-
+            
             <Button
               title={showAllMarkers ? translate('hideAllMarkers', selectedLanguage) : translate('showAllMarkers', selectedLanguage)}
               onPress={() => setShowAllMarkers(!showAllMarkers)}
@@ -418,17 +418,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 8,
   },
-  switch: {
-    backgroundColor: '#CCCCCC',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    marginRight: 4,
-  },
-  activeSwitch: {
-    backgroundColor: '#2196F3',
-  },
-  calloutTitle: {
+  selectedLanguage: {
     fontWeight: 'bold',
   },
   modalContainer: {
