@@ -1,4 +1,3 @@
-// Import necessary components from React Native and Expo libraries
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Modal, Button, Switch } from 'react-native';
@@ -71,7 +70,6 @@ const darkMapStyle = [
   },
 ];
 
-// Define the main App component
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -206,16 +204,15 @@ export default function App() {
           showsCompass={false}
           rotateEnabled={true}
           onMapReady={() => setMapLoaded(true)}
-          customMapStyle={darkMode ? darkMapStyle : []} // Apply dark map style here
+          customMapStyle={darkMode ? darkMapStyle : []}
         >
-          {/* Markers and Callouts */}
           <Marker
             coordinate={{
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             }}
-            title={translate('yourLocation', selectedLanguage)} // Add selectedLanguage parameter
-            description={translate('youAreHere', selectedLanguage)} // Add selectedLanguage parameter
+            title={translate('yourLocation', selectedLanguage)}
+            description={translate('youAreHere', selectedLanguage)}
           >
             <Image
               source={require('./images/bicycle.png')}
@@ -223,11 +220,11 @@ export default function App() {
             />
             <Callout tooltip>
               <View style={styles.callout}>
-                <Text style={styles.calloutTitle}>{translate('yourLocation', selectedLanguage)}</Text>
-                <Text>{translate('youAreHere', selectedLanguage)}</Text>
+                <Text style={styles.calloutTitle}>Your Location</Text>
+                <Text>You are here.</Text>
               </View>
             </Callout>
-          </Marker> 
+          </Marker>
 
           {showAllMarkers &&
             bikeparkingspots.map((spot) => (
@@ -254,26 +251,25 @@ export default function App() {
                   }
                   style={{ width: 32, height: 32, borderRadius: 8 }}
                 />
-                <Callout
-                  tooltip
-                  onPress={() => {
-                    if (favorites.includes(spot.id)) {
-                      updateFavorites(favorites.filter((id) => id !== spot.id));
-                    } else {
-                      updateFavorites([...favorites, spot.id]);
-                    }
-                  }}
-                >
-                  <View style={styles.callout}>
-                    <Text style={styles.calloutTitle}>{spot.name}</Text>
-                    <Text>Capacity: {spot.capacity}</Text>
-                    <Text>
-                      {favorites.includes(spot.id)
-                        ? 'Click to remove from favorites'
-                        : 'Click to add to favorites'}
-                    </Text>
-                  </View>
-                </Callout>
+              <Callout
+                tooltip
+                onPress={() => {
+                  if (favorites.includes(spot.id)) {
+                    updateFavorites(favorites.filter((id) => id !== spot.id));
+                  } else {
+                    updateFavorites([...favorites, spot.id]);
+                  }
+                }}
+              >
+                <View style={styles.callout}>
+                  <Text style={styles.calloutTitle}>{spot.name}</Text>
+                  <Text>{translate(
+                    favorites.includes(spot.id) ? 'removeFromFavorites' : 'addToFavorites',
+                    selectedLanguage
+                  )}</Text>
+                </View>
+              </Callout>
+
               </Marker>
             ))}
         </MapView.Animated>
@@ -282,16 +278,16 @@ export default function App() {
           <Text style={styles.error}>{errorMsg}</Text>
         </View>
       ) : (
-        <Text>{translate('loadingMap')}</Text>
+        <Text>{translate('loadingMap', selectedLanguage)}</Text>
       )}
 
       {mapLoaded && (
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => setShowList(!showList)}>
-            <Text style={styles.buttonText}>Show List</Text>
+            <Text style={styles.buttonText}>{translate('showList', selectedLanguage)}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => setShowMenu(!showMenu)}>
-            <Text style={styles.buttonText}>Settings</Text>
+            <Text style={styles.buttonText}>{translate('settings', selectedLanguage)}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -300,10 +296,14 @@ export default function App() {
         <View style={styles.listContainer}>
           <View style={styles.switchContainer}>
             <TouchableOpacity onPress={() => setShowFavorites(false)}>
-              <Text style={[styles.switch, !showFavorites && styles.activeSwitch]}>All</Text>
+              <Text style={[styles.switch, !showFavorites && styles.activeSwitch]}>
+                {translate('showAllMarkers', selectedLanguage)}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowFavorites(true)}>
-              <Text style={[styles.switch, showFavorites && styles.activeSwitch]}>Favorites</Text>
+              <Text style={[styles.switch, showFavorites && styles.activeSwitch]}>
+                {translate('showFavoriteMarkers', selectedLanguage)}
+              </Text>
             </TouchableOpacity>
           </View>
           {(showFavorites
@@ -311,7 +311,7 @@ export default function App() {
             : bikeparkingspots
           ).map((spot) => (
             <TouchableOpacity key={spot.id} onPress={() => handleSpotPress(spot)}>
-              <Text>{spot.name} - Capacity: {spot.capacity}</Text>
+              <Text>{spot.name} - {translate('capacity', selectedLanguage)}: {spot.capacity}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -320,8 +320,7 @@ export default function App() {
       <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.menu}>
-            {/* Language selection */}
-            <Text style={styles.menuItem}>Select Language:</Text>
+            <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
             <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
               <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
                 English
@@ -333,26 +332,24 @@ export default function App() {
               </Text>
             </TouchableOpacity>
 
-            {/* Dark mode switch */}
             <View style={styles.darkModeContainer}>
-              <Text style={styles.darkModeText}>Dark Mode</Text>
+              <Text style={styles.darkModeText}>{translate('darkMode', selectedLanguage)}</Text>
               <Switch value={darkMode} onValueChange={toggleDarkMode} />
             </View>
 
-            {/* Other menu options */}
             <Button
-              title={showAllMarkers ? 'Hide All Markers' : 'Show All Markers'}
+              title={showAllMarkers ? translate('hideAllMarkers', selectedLanguage) : translate('showAllMarkers', selectedLanguage)}
               onPress={() => setShowAllMarkers(!showAllMarkers)}
             />
             <Button
-              title={showRegularMarkers ? 'Hide Regular Markers' : 'Show Regular Markers'}
+              title={showRegularMarkers ? translate('hideRegularMarkers', selectedLanguage) : translate('showRegularMarkers', selectedLanguage)}
               onPress={() => setShowRegularMarkers(!showRegularMarkers)}
             />
             <Button
-              title={showFavoriteMarkers ? 'Hide Favorite Markers' : 'Show Favorite Markers'}
+              title={showFavoriteMarkers ? translate('hideFavoriteMarkers', selectedLanguage) : translate('showFavoriteMarkers', selectedLanguage)}
               onPress={() => setShowFavoriteMarkers(!showFavoriteMarkers)}
             />
-            <Button title="Close Menu" onPress={() => setShowMenu(false)} />
+            <Button title={translate('closeMenu', selectedLanguage)} onPress={() => setShowMenu(false)} />
           </View>
         </View>
       </Modal>
