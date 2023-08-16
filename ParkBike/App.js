@@ -6,6 +6,7 @@ import Text from './Text.js';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import translate from './i18n';
 
 const darkMapStyle = [
   {
@@ -70,8 +71,6 @@ const darkMapStyle = [
   },
 ];
 
-
-
 // Define the main App component
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -88,8 +87,10 @@ export default function App() {
   const [showRegularMarkers, setShowRegularMarkers] = useState(true);
   const [showFavoriteMarkers, setShowFavoriteMarkers] = useState(true);
   const [darkMode, setDarkMode] = useState(false); // State for dark mode
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   useEffect(() => {
+    console.log(`Selected language: ${selectedLanguage}`);
     console.log(`Re-rendering map. Dark mode set to: ${darkMode}.`);
   
     let mapRenderSuccessful = true;
@@ -205,7 +206,7 @@ export default function App() {
           showsCompass={false}
           rotateEnabled={true}
           onMapReady={() => setMapLoaded(true)}
-          customMapStyle={darkMode ? darkMapStyle : []}// Apply dark map style here
+          customMapStyle={darkMode ? darkMapStyle : []} // Apply dark map style here
         >
           {/* Markers and Callouts */}
           <Marker
@@ -213,8 +214,8 @@ export default function App() {
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             }}
-            title="Your Location"
-            description="You are here."
+            title={translate('yourLocation', selectedLanguage)} // Add selectedLanguage parameter
+            description={translate('youAreHere', selectedLanguage)} // Add selectedLanguage parameter
           >
             <Image
               source={require('./images/bicycle.png')}
@@ -222,11 +223,11 @@ export default function App() {
             />
             <Callout tooltip>
               <View style={styles.callout}>
-                <Text style={styles.calloutTitle}>Your Location</Text>
-                <Text>You are here.</Text>
+                <Text style={styles.calloutTitle}>{translate('yourLocation', selectedLanguage)}</Text>
+                <Text>{translate('youAreHere', selectedLanguage)}</Text>
               </View>
             </Callout>
-          </Marker>
+          </Marker> 
 
           {showAllMarkers &&
             bikeparkingspots.map((spot) => (
@@ -281,7 +282,7 @@ export default function App() {
           <Text style={styles.error}>{errorMsg}</Text>
         </View>
       ) : (
-        <Text>Loading map...</Text>
+        <Text>{translate('loadingMap')}</Text>
       )}
 
       {mapLoaded && (
@@ -319,7 +320,20 @@ export default function App() {
       <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.menu}>
-            {/* Add dark mode switch */}
+            {/* Language selection */}
+            <Text style={styles.menuItem}>Select Language:</Text>
+            <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
+              <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
+                English
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedLanguage('nl')}>
+              <Text style={[styles.menuItem, selectedLanguage === 'nl' && styles.selectedLanguage]}>
+                Nederlands
+              </Text>
+            </TouchableOpacity>
+
+            {/* Dark mode switch */}
             <View style={styles.darkModeContainer}>
               <Text style={styles.darkModeText}>Dark Mode</Text>
               <Switch value={darkMode} onValueChange={toggleDarkMode} />
