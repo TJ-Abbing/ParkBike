@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { View, Image, TouchableOpacity, Modal, Button, Switch } from 'react-native';
-import Text from './Text.js';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Text from './Text.js';
 import translate from './i18n';
 import styles from './styles';
 import darkMapStyle from './darkMapStyle';
@@ -31,7 +31,7 @@ export default function App() {
     console.log(`Re-rendering map. Dark mode set to: ${darkMode}.`);
 
     let mapRenderSuccessful = true;
-  
+
     // Fetch user location and bike parking data
     const fetchLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -40,7 +40,7 @@ export default function App() {
         mapRenderSuccessful = false;
         return;
       }
-  
+
       try {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
@@ -59,7 +59,7 @@ export default function App() {
         mapRenderSuccessful = false;
       }
     };
-  
+
     const getFavorites = async () => {
       try {
         const storedFavorites = await AsyncStorage.getItem('favorites');
@@ -72,7 +72,7 @@ export default function App() {
         mapRenderSuccessful = false;
       }
     };
-  
+
     const fetchBikeparkingspots = async () => {
       try {
         const response = await fetch(
@@ -86,7 +86,7 @@ export default function App() {
         mapRenderSuccessful = false;
       }
     };
-  
+
     // Fetch location, favorites, and bike parking data
     Promise.all([fetchLocation(), getFavorites(), fetchBikeparkingspots()]).then(() => {
       // Log when all asynchronous operations have completed
@@ -98,7 +98,6 @@ export default function App() {
     });
 
   }, [darkMode]);
-
 
   const handleSpotPress = (spot) => {
     setMapRegion({
@@ -126,8 +125,8 @@ export default function App() {
     setDarkMode((prevMode) => !prevMode);
   };
 
-return (
-  <View style={styles.container}>
+  return (
+    <View style={styles.container}>
       {location ? (
         <MapView.Animated
           key={mapKey}
@@ -219,21 +218,21 @@ return (
       ) : (
         <Text>{translate('loadingMap', selectedLanguage)}</Text>
       )}
-      
-    {mapLoaded && (
-      <View style={styles.buttonContainer}>
+
+      {mapLoaded && (
+        <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => setShowList(!showList)}>
           <Text style={styles.buttonText}>{translate('showList', selectedLanguage)}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => setShowMenu(!showMenu)}>
           <Text style={styles.buttonText}>{translate('settings', selectedLanguage)}</Text>
         </TouchableOpacity>
-      </View>
-    )}
-    
-    {/* List Modal */}
-    {showList && (
-      <View style={styles.listContainer}>
+        </View>
+      )}
+
+      {/* List Modal */}
+      {showList && (
+        <View style={styles.listContainer}>
         <View style={styles.switchContainer}>
           <TouchableOpacity onPress={() => setShowFavorites(false)}>
             <Button
@@ -258,13 +257,13 @@ return (
             <Text>{spot.name} - {translate('capacity', selectedLanguage)}: {spot.capacity}</Text>
           </TouchableOpacity>
         ))}
-      </View>
-    )}
-    
-    {/* Settings Modal */}
-    <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
-      <View style={styles.modalContainer}>
-        <View style={styles.menu}>
+        </View>
+      )}
+
+      {/* Settings Modal */}
+      <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.menu}>
       <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
       <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
         <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
@@ -287,23 +286,35 @@ return (
             </View>
 
             <Button
-              title={showAllMarkers ? translate('hideAllMarkers', selectedLanguage) : translate('showAllMarkers', selectedLanguage)}
+              title={translate(
+                showAllMarkers ? 'hideAllMarkers' : 'showAllMarkers',
+                selectedLanguage
+              )}
               onPress={() => setShowAllMarkers(!showAllMarkers)}
             />
             <Button
-              title={showRegularMarkers ? translate('hideRegularMarkers', selectedLanguage) : translate('showRegularMarkers', selectedLanguage)}
+              title={translate(
+                showRegularMarkers ? 'hideRegularMarkers' : 'showRegularMarkers',
+                selectedLanguage
+              )}
               onPress={() => setShowRegularMarkers(!showRegularMarkers)}
             />
             <Button
-              title={showFavoriteMarkers ? translate('hideFavoriteMarkers', selectedLanguage) : translate('showFavoriteMarkers', selectedLanguage)}
+              title={translate(
+                showFavoriteMarkers ? 'hideFavoriteMarkers' : 'showFavoriteMarkers',
+                selectedLanguage
+              )}
               onPress={() => setShowFavoriteMarkers(!showFavoriteMarkers)}
             />
-            <Button title={translate('closeMenu', selectedLanguage)} onPress={() => setShowMenu(false)} />
+            <Button
+              title={translate('closeMenu', selectedLanguage)}
+              onPress={() => setShowMenu(false)}
+            />
           </View>
         </View>
-    </Modal>
+      </Modal>
 
-    <StatusBar style="auto" />
-  </View>
-);
+      <StatusBar style="auto" />
+    </View>
+  );
 }
