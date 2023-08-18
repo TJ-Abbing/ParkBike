@@ -317,26 +317,30 @@ export default function App() {
         </View>
       )}
 
-      <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.menu}>
-            <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
-            <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
-              <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
-                English{selectedLanguage === 'en' && '  ✔'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedLanguage('nl')}>
-              <Text style={[styles.menuItem, selectedLanguage === 'nl' && styles.selectedLanguage]}>
-                Nederlands{selectedLanguage === 'nl' && '  ✔'}
-              </Text>
-            </TouchableOpacity>
-
+<Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
+  <View style={styles.modalContainer}>
+    <View style={styles.menu}>
+      <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
+      <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
+        <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
+          English{selectedLanguage === 'en' && '  ✔'}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setSelectedLanguage('nl')}>
+        <Text style={[styles.menuItem, selectedLanguage === 'nl' && styles.selectedLanguage]}>
+          Nederlands{selectedLanguage === 'nl' && '  ✔'}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setSelectedLanguage('de')}>
+        <Text style={[styles.menuItem, selectedLanguage === 'de' && styles.selectedLanguage]}>
+          Deutsch{selectedLanguage === 'de' && '  ✔'}
+        </Text>
+      </TouchableOpacity>
             <View style={styles.darkModeContainer}>
               <Text style={styles.darkModeText}>{translate('darkMode', selectedLanguage)}</Text>
               <Switch value={darkMode} onValueChange={toggleDarkMode} />
             </View>
-            
+
             <Button
               title={showAllMarkers ? translate('hideAllMarkers', selectedLanguage) : translate('showAllMarkers', selectedLanguage)}
               onPress={() => setShowAllMarkers(!showAllMarkers)}
@@ -350,9 +354,9 @@ export default function App() {
               onPress={() => setShowFavoriteMarkers(!showFavoriteMarkers)}
             />
             <Button title={translate('closeMenu', selectedLanguage)} onPress={() => setShowMenu(false)} />
-          </View>
-        </View>
-      </Modal>
+    </View>
+  </View>
+</Modal>
 
       <StatusBar style="auto" />
     </View>
