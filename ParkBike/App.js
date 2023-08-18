@@ -8,6 +8,7 @@ import Text from './Text.js';
 import translate from './i18n';
 import styles from './styles';
 import darkMapStyle from './darkMapStyle';
+import MapViewComponent from './MapViewComponent';
 
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -128,89 +129,21 @@ export default function App() {
   return (
     <View style={styles.container}>
       {location ? (
-        <MapView.Animated
-          key={mapKey}
-          style={[styles.map, darkMode && styles.darkMap]}
-          region={mapRegion}
-          mapType={'standard'}
-          showsUserLocation={false}
-          showsMyLocationButton={false}
-          showsPointsOfInterest={false}
-          showsBuildings={true}
-          showsTraffic={false}
-          showsIndoors={false}
-          showsCompass={false}
-          rotateEnabled={true}
-          onMapReady={() => setMapLoaded(true)}
-          customMapStyle={darkMode ? darkMapStyle : []}
-        >
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title={translate('yourLocation', selectedLanguage)}
-            description={translate('youAreHere', selectedLanguage)}
-          >
-            <Image
-              source={require('./images/bicycle.png')}
-              style={{ width: 48, height: 48 }}
-            />
-            <Callout tooltip>
-              <View style={styles.callout}>
-                <Text style={styles.calloutTitle}>Your Location</Text>
-                <Text>You are here.</Text>
-              </View>
-            </Callout>
-          </Marker>
-    
-          {showAllMarkers &&
-            bikeparkingspots.map((spot) => (
-              <Marker
-                key={spot.id}
-                coordinate={{
-                  latitude: spot.latitude,
-                  longitude: spot.longitude,
-                }}
-                title={spot.name}
-                description={`Capacity: ${spot.capacity}`}
-                opacity={
-                  (showRegularMarkers && !favorites.includes(spot.id)) ||
-                  (showFavoriteMarkers && favorites.includes(spot.id))
-                    ? 1
-                    : 0
-                }
-              >
-                <Image
-                  source={
-                    favorites.includes(spot.id)
-                      ? require('./images/biycle_parking_spot_favorite.png')
-                      : require('./images/biycle_parking_spot_regular.png')
-                  }
-                  style={{ width: 32, height: 32, borderRadius: 8 }}
-                />
-              <Callout
-                tooltip
-                onPress={() => {
-                  if (favorites.includes(spot.id)) {
-                    updateFavorites(favorites.filter((id) => id !== spot.id));
-                  } else {
-                    updateFavorites([...favorites, spot.id]);
-                  }
-                }}
-              >
-                <View style={styles.callout}>
-                  <Text style={styles.calloutTitle}>{spot.name}</Text>
-                  <Text>{translate(
-                    favorites.includes(spot.id) ? 'removeFromFavorites' : 'addToFavorites',
-                    selectedLanguage
-                  )}</Text>
-                </View>
-              </Callout>
-
-              </Marker>
-            ))}
-        </MapView.Animated>
+        <MapViewComponent
+        location={location}
+        mapRegion={mapRegion}
+        bikeparkingspots={bikeparkingspots}
+        showAllMarkers={showAllMarkers}
+        showRegularMarkers={showRegularMarkers}
+        showFavoriteMarkers={showFavoriteMarkers}
+        darkMode={darkMode}
+        selectedLanguage={selectedLanguage}
+        handleSpotPress={handleSpotPress}
+        updateFavorites={updateFavorites}
+        mapKey={mapKey}
+        favorites={favorites}
+        setMapLoaded={setMapLoaded}
+      />
       ) : errorMsg ? (
         <View style={styles.errorContainer}>
           <Text style={styles.error}>{errorMsg}</Text>
