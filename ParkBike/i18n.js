@@ -15,6 +15,8 @@ const translations = {
     removeFromFavorites: 'Click to remove from favorites',
     addToFavorites: 'Click to add to favorites',
     closeMenu: 'Close Menu',
+    allMarkers: 'All Markers',
+    favoriteMarkers: 'Favorite Markers',
   },
   nl: {
     yourLocation: 'Jouw locatie',
@@ -32,6 +34,8 @@ const translations = {
     removeFromFavorites: 'Klik om uit favorieten te verwijderen',
     addToFavorites: 'Klik om aan favorieten toe te voegen',
     closeMenu: 'Sluit menu',
+    allMarkers: 'Alle Markers',
+    favoriteMarkers: 'Favoriete Markers',
   },
   de: {
     yourLocation: 'Dein Standort',
@@ -49,6 +53,8 @@ const translations = {
     removeFromFavorites: 'Zum Entfernen von Favoriten klicken',
     addToFavorites: 'Zum Hinzufügen zu Favoriten klicken',
     closeMenu: 'Menü schließen',
+    allMarkers: 'Alle Markierungen',
+    favoriteMarkers: 'Favorisierte Markierungen',
   },
   // Add more languages and translations as needed. Would suggest French and Spanish next.
 };

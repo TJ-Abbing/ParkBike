@@ -187,8 +187,8 @@ export default function App() {
     setDarkMode((prevMode) => !prevMode);
   };
 
-  return (
-    <View style={styles.container}>
+return (
+  <View style={styles.container}>
       {location ? (
         <MapView.Animated
           key={mapKey}
@@ -225,7 +225,7 @@ export default function App() {
               </View>
             </Callout>
           </Marker>
-
+    
           {showAllMarkers &&
             bikeparkingspots.map((spot) => (
               <Marker
@@ -281,45 +281,51 @@ export default function App() {
         <Text>{translate('loadingMap', selectedLanguage)}</Text>
       )}
       
-      {mapLoaded && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => setShowList(!showList)}>
-            <Text style={styles.buttonText}>{translate('showList', selectedLanguage)}</Text>
+    {mapLoaded && (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => setShowList(!showList)}>
+          <Text style={styles.buttonText}>{translate('showList', selectedLanguage)}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => setShowMenu(!showMenu)}>
+          <Text style={styles.buttonText}>{translate('settings', selectedLanguage)}</Text>
+        </TouchableOpacity>
+      </View>
+    )}
+    
+    {/* List Modal */}
+    {showList && (
+      <View style={styles.listContainer}>
+        <View style={styles.switchContainer}>
+          <TouchableOpacity onPress={() => setShowFavorites(false)}>
+            <Button
+              title={translate('allMarkers', selectedLanguage)}
+              onPress={() => setShowFavorites(false)}
+              color={showFavorites ? 'gray' : '#2196F3'}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => setShowMenu(!showMenu)}>
-            <Text style={styles.buttonText}>{translate('settings', selectedLanguage)}</Text>
+          <TouchableOpacity onPress={() => setShowFavorites(true)}>
+            <Button
+              title={translate('favoriteMarkers', selectedLanguage)}
+              onPress={() => setShowFavorites(true)}
+              color={showFavorites ? '#2196F3' : 'gray'}
+            />
           </TouchableOpacity>
         </View>
-      )}
-
-      {showList && (
-        <View style={styles.listContainer}>
-          <View style={styles.switchContainer}>
-            <TouchableOpacity onPress={() => setShowFavorites(false)}>
-              <Text style={[styles.switch, !showFavorites && styles.activeSwitch]}>
-                {translate('showAllMarkers', selectedLanguage)}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowFavorites(true)}>
-              <Text style={[styles.switch, showFavorites && styles.activeSwitch]}>
-                {translate('showFavoriteMarkers', selectedLanguage)}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {(showFavorites
-            ? bikeparkingspots.filter((spot) => favorites.includes(spot.id))
-            : bikeparkingspots
-          ).map((spot) => (
-            <TouchableOpacity key={spot.id} onPress={() => handleSpotPress(spot)}>
-              <Text>{spot.name} - {translate('capacity', selectedLanguage)}: {spot.capacity}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-
-<Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
-  <View style={styles.modalContainer}>
-    <View style={styles.menu}>
+        {(showFavorites
+          ? bikeparkingspots.filter((spot) => favorites.includes(spot.id))
+          : bikeparkingspots
+        ).map((spot) => (
+          <TouchableOpacity key={spot.id} onPress={() => handleSpotPress(spot)}>
+            <Text>{spot.name} - {translate('capacity', selectedLanguage)}: {spot.capacity}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    )}
+    
+    {/* Settings Modal */}
+    <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
+      <View style={styles.modalContainer}>
+        <View style={styles.menu}>
       <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
       <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
         <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
@@ -354,13 +360,13 @@ export default function App() {
               onPress={() => setShowFavoriteMarkers(!showFavoriteMarkers)}
             />
             <Button title={translate('closeMenu', selectedLanguage)} onPress={() => setShowMenu(false)} />
-    </View>
-  </View>
-</Modal>
+          </View>
+        </View>
+    </Modal>
 
-      <StatusBar style="auto" />
-    </View>
-  );
+    <StatusBar style="auto" />
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
