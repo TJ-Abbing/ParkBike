@@ -166,7 +166,7 @@
                 )}
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => setShowList(true)}>
+                <TouchableOpacity style={styles.button} onPress={() => setShowList((prevShowList) => !prevShowList)}>
                   <Text style={styles.buttonText}>{translate('showList', selectedLanguage)}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => setShowMenu(true)}>
