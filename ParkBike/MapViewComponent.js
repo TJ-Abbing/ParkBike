@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import translate from './i18n';
 import styles from './styles'; 
 import Text from './Text.js';
+import darkMapStyle from './darkMapStyle';
 
 const MapViewComponent = ({
   location,
