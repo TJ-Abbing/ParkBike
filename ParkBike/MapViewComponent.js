@@ -15,7 +15,6 @@ const MapViewComponent = ({
   showFavoriteMarkers,
   darkMode,
   selectedLanguage,
-  handleSpotPress,
   updateFavorites,
   mapKey,
   favorites,
