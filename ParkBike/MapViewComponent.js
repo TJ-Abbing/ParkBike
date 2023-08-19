@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, View, Text } from 'react-native';
+import { Image, View } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import translate from './i18n';
 import styles from './styles'; 
+import Text from './Text.js';
 
 const MapViewComponent = ({
   location,
@@ -57,52 +58,51 @@ const MapViewComponent = ({
       </Marker>
 
       {showAllMarkers &&
-            bikeparkingspots.map((spot) => (
-              <Marker
-                key={spot.id}
-                coordinate={{
-                  latitude: spot.latitude,
-                  longitude: spot.longitude,
-                }}
-                title={spot.name}
-                description={`Capacity: ${spot.capacity}`}
-                opacity={
-                  (showRegularMarkers && !favorites.includes(spot.id)) ||
-                  (showFavoriteMarkers && favorites.includes(spot.id))
-                    ? 1
-                    : 0
+        bikeparkingspots.map((spot) => (
+          <Marker
+            key={spot.id}
+            coordinate={{
+              latitude: spot.latitude,
+              longitude: spot.longitude,
+            }}
+            title={spot.name}
+            description={`Capacity: ${spot.capacity}`}
+            opacity={
+              (showRegularMarkers && !favorites.includes(spot.id)) ||
+              (showFavoriteMarkers && favorites.includes(spot.id))
+                ? 1
+                : 0
+            }
+          >
+            <Image
+              source={
+                favorites.includes(spot.id)
+                  ? require('./images/biycle_parking_spot_favorite.png')
+                  : require('./images/biycle_parking_spot_regular.png')
+              }
+              style={{ width: 32, height: 32, borderRadius: 8 }}
+            />
+            <Callout
+              tooltip
+              onPress={() => {
+                if (favorites.includes(spot.id)) {
+                  updateFavorites(favorites.filter((id) => id !== spot.id));
+                } else {
+                  updateFavorites([...favorites, spot.id]);
                 }
-              >
-                <Image
-                  source={
-                    favorites.includes(spot.id)
-                      ? require('./images/biycle_parking_spot_favorite.png')
-                      : require('./images/biycle_parking_spot_regular.png')
-                  }
-                  style={{ width: 32, height: 32, borderRadius: 8 }}
-                />
-              <Callout
-                tooltip
-                onPress={() => {
-                  if (favorites.includes(spot.id)) {
-                    updateFavorites(favorites.filter((id) => id !== spot.id));
-                  } else {
-                    updateFavorites([...favorites, spot.id]);
-                  }
-                }}
-              >
-                <View style={styles.callout}>
-                  <Text style={styles.calloutTitle}>{spot.name}</Text>
-                  <Text>{translate(
-                    favorites.includes(spot.id) ? 'removeFromFavorites' : 'addToFavorites',
-                    selectedLanguage
-                  )}</Text>
-                </View>
-              </Callout>
-
-              </Marker>
-            ))}
-        </MapView.Animated>
+              }}
+            >
+              <View style={styles.callout}>
+                <Text style={styles.calloutTitle}>{spot.name}</Text>
+                <Text>{translate(
+                  favorites.includes(spot.id) ? 'removeFromFavorites' : 'addToFavorites',
+                  selectedLanguage
+                )}</Text>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+    </MapView.Animated>
   );
 };
 
