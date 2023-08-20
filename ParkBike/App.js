@@ -233,7 +233,6 @@ const updateFavorites = async (newFavorites) => {
               <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
                 <View style={styles.modalContainer}>
                   <View style={styles.menu}>
-                    <Text style={styles.menuItem}>{translate('selectLanguage', selectedLanguage)}</Text>
                     <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
                       <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
                         English{selectedLanguage === 'en' && '  ✔'}
