@@ -1,3 +1,4 @@
+// This file contains the default styles for the app
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({

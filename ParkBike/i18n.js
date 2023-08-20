@@ -1,3 +1,4 @@
+// This file contains all the translations for the app
 const translations = {
   en: {
     yourLocation: 'Your Location',

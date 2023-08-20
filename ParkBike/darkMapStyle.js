@@ -1,3 +1,4 @@
+// This file contains the dark map style for the map component
 const darkMapStyle = [
     {
       elementType: 'geometry',

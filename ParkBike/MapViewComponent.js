@@ -1,3 +1,4 @@
+// This file provides the map view component for the app so that the user can see the bike parking spots on a map
 import React from 'react';
 import { Image, View } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
@@ -37,7 +38,7 @@ const MapViewComponent = ({
       onMapReady={() => setMapLoaded(true)}
       customMapStyle={darkMode ? darkMapStyle : []}
     >
-      <Marker
+      <Marker // Marker for the user's location
         coordinate={{
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
@@ -57,8 +58,8 @@ const MapViewComponent = ({
         </Callout>
       </Marker>
 
-      {showAllMarkers &&
-        bikeparkingspots.map((spot) => (
+      {showAllMarkers && // Marker for each bike parking spot in the bikeparkingspots array 
+        bikeparkingspots.map((spot) => ( // map function to iterate through the bikeparkingspots array and display each spot name
           <Marker
             key={spot.id}
             coordinate={{
@@ -82,7 +83,7 @@ const MapViewComponent = ({
               }
               style={{ width: 32, height: 32, borderRadius: 8 }}
             />
-            <Callout
+            <Callout // Callout for each bike parking spot marker that displays the spot name and a button to add/remove the spot from favorites
               tooltip
               onPress={() => {
                 if (favorites.includes(spot.id)) {

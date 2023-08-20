@@ -1,3 +1,4 @@
+// This file provides the settings screen for the app
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Text from './Text.js';
