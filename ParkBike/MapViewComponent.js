@@ -87,9 +87,9 @@ const MapViewComponent = ({
               tooltip
               onPress={() => {
                 if (favorites.includes(spot.id)) {
-                  updateFavorites(favorites.filter((id) => id !== spot.id));
+                  updateFavorites(favorites.filter((id) => id !== spot.id)); // remove spot from favorites and update favorites array
                 } else {
-                  updateFavorites([...favorites, spot.id]);
+                  updateFavorites([...favorites, spot.id]); // add spot to favorites and update favorites array
                 }
               }}
             >

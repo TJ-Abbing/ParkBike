@@ -53,7 +53,7 @@ export default function App() {
         return;
       }
 
-      try {
+      try { // Try to fetch location and set map region
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
         setMapRegion({
@@ -138,7 +138,7 @@ const updateFavorites = async (newFavorites) => {
 // Function to toggle dark mode setting and re-render map
   const toggleDarkMode = () => {
     console.log('Toggling dark mode.');
-    setDarkMode((prevMode) => !prevMode);
+    setDarkMode((prevMode) => !prevMode); // Toggle dark mode setting and re-render map
   };
 
   return (
@@ -154,7 +154,7 @@ const updateFavorites = async (newFavorites) => {
                 <MapViewComponent
                   location={location}
                   mapRegion={mapRegion}
-                  bikeparkingspots={bikeparkingspots}
+                  bikeparkingspots={bikeparkingspots} 
                   showAllMarkers={showAllMarkers}
                   showRegularMarkers={showRegularMarkers}
                   showFavoriteMarkers={showFavoriteMarkers}
@@ -193,8 +193,8 @@ const updateFavorites = async (newFavorites) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-  
-              {/* List Screen */}
+              
+              {/* List with bike parking spots */}
               {showList && (
                 <View style={styles.listContainer}>
                   <View style={styles.switchContainer}>
@@ -213,6 +213,8 @@ const updateFavorites = async (newFavorites) => {
                       />
                     </TouchableOpacity>
                   </View>
+
+                  {/* List of favorited bike parking spots */}
                   {showFavorites
                     ? bikeparkingspots.filter((spot) => favorites.includes(spot.id))
                         .map((spot) => (
@@ -233,6 +235,8 @@ const updateFavorites = async (newFavorites) => {
               <Modal transparent={true} visible={showMenu} onRequestClose={() => setShowMenu(false)}>
                 <View style={styles.modalContainer}>
                   <View style={styles.menu}>
+
+                    {/* Language selection and dark mode toggle */}
                     <TouchableOpacity onPress={() => setSelectedLanguage('en')}>
                       <Text style={[styles.menuItem, selectedLanguage === 'en' && styles.selectedLanguage]}>
                         English{selectedLanguage === 'en' && '  ✔'}
@@ -253,6 +257,7 @@ const updateFavorites = async (newFavorites) => {
                       <Switch value={darkMode} onValueChange={toggleDarkMode} />
                     </View>
   
+                    {/* Buttons to show/hide markers and close menu */}
                     <Button
                       title={translate(
                         showAllMarkers ? 'hideAllMarkers' : 'showAllMarkers',
