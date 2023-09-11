@@ -1,4 +1,16 @@
-<img src="ParkBike/images/screenshot.jpg" alt="Screenshot" width="25%">
+# ParkBike
+
+**ParkBike** is a mobile application built with React Native and Expo, designed to help users find nearby bike parking spots. This app utilizes location services to display a map with various bike parking locations, allowing users to explore and interact with the available spots.
+
+![Screenshot](ParkBike/images/screenshot.jpg)
+
+## Features
+
+- **Interactive Map**: View bike parking spots on an interactive map.
+- **Location Services**: Utilize your device's location for accurate spot identification.
+- **Favorites**: Save your favorite parking spots for easy access.
+- **Customizable**: Toggle dark mode, filter spot markers, and choose your preferred language.
+- **Settings**: Configure app settings to suit your preferences.
 
 # Quick start
 Follow the steps below to get started.
@@ -7,7 +19,7 @@ Follow the steps below to get started.
 cd .\ParkBike\
 ```
 ## Install dependencies
-Installs all packages that it depends on.
+Installs all packages the app depends on.
 ```
 npm install
 ```
