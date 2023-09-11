@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Modal, Button, Switch } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import config from './config';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Text from './Text.js';
@@ -33,6 +34,8 @@ export default function App() {
   const [showFavoriteMarkers, setShowFavoriteMarkers] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
+
+  const apiEndpoint = config.API_ENDPOINT;
 
   // Fetch location, favorites, and bike parking data on initial render
   useEffect(() => {
@@ -86,20 +89,18 @@ export default function App() {
       }
     };
 
-    // Fetch bike parking data from API
-    const fetchBikeparkingspots = async () => {
-      try {
-        const response = await fetch(
-          'https://stud.hosted.hr.nl/1014535/parkbike/api/bikeparkingspots.json'
-        );
-        const data = await response.json();
-        setBikeparkingspots(data);
-        console.log('Bike parking spots fetched successfully.');
-      } catch (error) {
-        console.error(`Error fetching bike parking spots: ${error.message || error}`);
-        mapRenderSuccessful = false;
-      }
-    };
+  // Fetch bike parking data from API
+  const fetchBikeparkingspots = async () => {
+    try {
+      const response = await fetch(apiEndpoint);
+      const data = await response.json();
+      setBikeparkingspots(data);
+      console.log('Bike parking spots fetched successfully.');
+    } catch (error) {
+      console.error(`Error fetching bike parking spots: ${error.message || error}`);
+      mapRenderSuccessful = false;
+    }
+  };
 
     // Fetch location, favorites, and bike parking data
     Promise.all([fetchLocation(), getFavorites(), fetchBikeparkingspots()]).then(() => {
