@@ -9,7 +9,7 @@
 - **Interactive Map**: View bike parking spots on an interactive map.
 - **Location Services**: Utilize your device's location for accurate spot identification.
 - **Favorites**: Save your favorite parking spots for easy access.
-- **Customizable**: Toggle dark mode, filter spot markers, and choose your preferred language (English, Dutch & German).
+- **Customizable**: Toggle dark mode, filter spot markers, and choose your preferred language (English, Dutch or German).
 - **Settings**: Configure app settings to suit your preferences.
 
 # Quick start
