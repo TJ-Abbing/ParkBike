@@ -1,3 +1,5 @@
+<img src="ParkBike/images/screenshot.jpg" alt="Screenshot" width="25%">
+
 # Quick start
 Follow the steps below to get started.
 ## Navigate to project directory
